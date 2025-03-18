@@ -53,12 +53,10 @@ open src/Timer.xcodeproj
 If you prefer to build from the command line:
 
 ```bash
-# Install dependencies (if you want to use the build scripts)
-bun install
-
 # Build the app
-cd src
-xcodebuild -project Timer.xcodeproj -scheme Timer -configuration Release
+bun run build
+
+# cd src && xcodebuild -project Timer.xcodeproj -scheme Timer -configuration Release
 
 # The built app will be in src/build/Release/Timer.app
 ```
@@ -127,6 +125,10 @@ For casual chit-chat with others using this package:
 “Software that is free, but hopes for a postcard.” We love receiving postcards from around the world showing where `Pomodoro.app` is being used! We showcase them on our website too.
 
 Our address: Stacks.js, 12665 Village Ln #2306, Playa Vista, CA 90094, United States 🌎
+
+## Credits
+
+- [@YYUUGGOO](https://github.com/YYUUGGOO) - for the original [Cloud](https://github.com/YYUUGGOO/Cloud) implementation
 
 ## Sponsors
 
