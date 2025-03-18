@@ -1,84 +1,100 @@
 import SwiftUI
 import AppKit
 
-struct ContentView: View {
-    @ObservedObject var viewModel: TimerViewModel
-    @AppStorage("standardTimer") private var standardTimer = 25
-    @AppStorage("shortBreak") private var shortBreak = 5
-    @AppStorage("longBreak") private var longBreak = 10
+// MARK: - Helper Views
+
+struct TimerDisplayView: View {
+    var remainingTime: Int
 
     var body: some View {
-        VStack {
-            Text(viewModel.timeString(from: viewModel.remainingTime))
-                .font(.system(.largeTitle, design: .monospaced))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 20)
+        Text(timeString(from: remainingTime))
+            .font(.system(size: 60, weight: .medium, design: .monospaced))
+            .foregroundColor(.primary)
+            .padding(.top, 10)
+    }
 
-            Slider(value: $viewModel.timerDuration, in: 1...60, step: 1)
-                .padding(.horizontal, 20)
-                .onReceive(viewModel.$timerDuration) { _ in
-                    viewModel.updateRemainingTime()
-                }
+    private func timeString(from seconds: Int) -> String {
+        let minutes = seconds / 60
+        let seconds = seconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+}
 
-            HStack {
-                Button(action: viewModel.toggleTimer) {
-                    Text(buttonText(for: viewModel.timerState))
-                }
-                .buttonStyle(PlainButtonStyle())
+struct ProgressSliderView: View {
+    var remainingTime: Int
+    var timerDuration: Double
+    var timerColor: Color
+    var onDragChanged: (Double) -> Void
 
-                Button(action: viewModel.resetTimer) {
-                    Text("Reset")
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 20)
+    var body: some View {
+        ZStack(alignment: .leading) {
+            Rectangle()
+                .frame(height: 6)
+                .foregroundColor(Color(NSColor.systemGray))
+                .cornerRadius(3)
 
-            HStack {
-                Button(action: { viewModel.setPresetTimer(minutes: standardTimer) }) {
-                    Text("\(self.standardTimer) Min")
-                }
-                .buttonStyle(PlainButtonStyle())
+            Rectangle()
+                .frame(width: calculateProgressWidth(), height: 6)
+                .foregroundColor(timerColor)
+                .cornerRadius(3)
 
-                Button(action: { viewModel.setPresetTimer(minutes: shortBreak) }) {
-                    Text("\(self.shortBreak) Min")
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                Button(action: { viewModel.setPresetTimer(minutes: longBreak) }) {
-                    Text("\(self.longBreak) Min")
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.trailing, 20)
-            .padding(.vertical)
-
-            HStack {
-                Button(action: {
-                    NSApplication.shared.terminate(nil)
-                }) {
-                    Text("Quit")
-                }
-                .buttonStyle(PlainButtonStyle())
-                .padding(.leading, 20)
-
-                Spacer()
-
-                Button("Detach Timer") {
-                    openTimerWindow()
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                Button("Settings") {
-                    openSettings()
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.trailing, 20)
+            Circle()
+                .frame(width: 16, height: 16)
+                .foregroundColor(.white)
+                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.15), radius: 2, x: 0, y: 1)
+                .offset(x: calculateProgressWidth() - 8)
         }
-        .frame(width: 300, height: 200)
+        .padding(.horizontal)
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { value in
+                    let percentage = min(max(0, value.location.x / 300), 1)
+                    let newValue = percentage * timerDuration * 60
+                    onDragChanged(newValue)
+                }
+        )
+    }
+
+    private func calculateProgressWidth() -> CGFloat {
+        let totalWidth: CGFloat = 300 - 40 // Account for padding
+        let progress = CGFloat(remainingTime) / CGFloat(timerDuration * 60)
+        return totalWidth * progress
+    }
+}
+
+struct ControlButtonsView: View {
+    var timerState: TimerState
+    var timerColor: Color
+    var onToggle: () -> Void
+    var onReset: () -> Void
+
+    var body: some View {
+        HStack(spacing: 20) {
+            Button(action: onToggle) {
+                Text(buttonText(for: timerState))
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(width: 80, height: 36)
+                    .background(
+                        RoundedRectangle(cornerRadius: 18)
+                            .fill(timerColor)
+                    )
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            Button(action: onReset) {
+                Text("Reset")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .frame(width: 80, height: 36)
+                    .background(
+                        RoundedRectangle(cornerRadius: 18)
+                            .fill(Color(NSColor.unemphasizedSelectedContentBackgroundColor))
+                    )
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+        .padding(.vertical, 5)
     }
 
     private func buttonText(for state: TimerState) -> String {
@@ -89,6 +105,138 @@ struct ContentView: View {
             return "Resume"
         case .stopped:
             return "Start"
+        }
+    }
+}
+
+struct TimerPresetsView: View {
+    var presets: [Int]
+    var currentDuration: Double
+    var timerColor: Color
+    var onPresetSelected: (Int) -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            ForEach(presets, id: \.self) { minutes in
+                Button(action: { onPresetSelected(minutes) }) {
+                    Text("\(minutes) Min")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(currentDuration == Double(minutes) ? .white : .primary)
+                        .frame(height: 30)
+                        .padding(.horizontal, 12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(currentDuration == Double(minutes) ? timerColor : Color(NSColor.controlBackgroundColor))
+                        )
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+        }
+        .padding(.bottom, 5)
+    }
+}
+
+struct BottomNavigationView: View {
+    var onQuit: () -> Void
+    var onDetachTimer: () -> Void
+    var onOpenSettings: () -> Void
+
+    var body: some View {
+        HStack {
+            Button(action: onQuit) {
+                Label("Quit", systemImage: "xmark.circle")
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            Spacer()
+
+            Button(action: onDetachTimer) {
+                Label("Detach Timer", systemImage: "arrow.up.right.square")
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            Button(action: onOpenSettings) {
+                Label("Settings", systemImage: "gearshape")
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 10)
+    }
+}
+
+// MARK: - Main ContentView
+
+struct ContentView: View {
+    @ObservedObject var viewModel: TimerViewModel
+    @AppStorage("standardTimer") private var standardTimer = 25
+    @AppStorage("shortBreak") private var shortBreak = 5
+    @AppStorage("longBreak") private var longBreak = 10
+    @State private var sliderValue: Double = 0
+
+    var body: some View {
+        VStack(spacing: 20) {
+            // Timer display
+            TimerDisplayView(remainingTime: viewModel.remainingTime)
+
+            // Progress slider
+            ProgressSliderView(
+                remainingTime: viewModel.remainingTime,
+                timerDuration: viewModel.timerDuration,
+                timerColor: timerColor(),
+                onDragChanged: { newValue in
+                    viewModel.timerDuration = newValue / 60
+                    viewModel.updateRemainingTime()
+                }
+            )
+
+            // Control buttons
+            ControlButtonsView(
+                timerState: viewModel.timerState,
+                timerColor: timerColor(),
+                onToggle: viewModel.toggleTimer,
+                onReset: viewModel.resetTimer
+            )
+
+            // Timer presets
+            TimerPresetsView(
+                presets: [standardTimer, shortBreak, longBreak],
+                currentDuration: viewModel.timerDuration,
+                timerColor: timerColor(),
+                onPresetSelected: { viewModel.setPresetTimer(minutes: $0) }
+            )
+
+            Divider()
+                .padding(.horizontal)
+
+            // Bottom navigation
+            BottomNavigationView(
+                onQuit: { NSApplication.shared.terminate(nil) },
+                onDetachTimer: openTimerWindow,
+                onOpenSettings: openSettings
+            )
+        }
+        .padding(.top)
+        .frame(width: 300, height: 260)
+        .background(Color(NSColor.windowBackgroundColor))
+        .onAppear {
+            sliderValue = viewModel.timerDuration
+        }
+    }
+
+    private func timerColor() -> Color {
+        if viewModel.timerDuration > 15 {
+            return Color.red.opacity(0.8) // Pomodoro
+        } else if viewModel.timerDuration > 8 {
+            return Color.blue.opacity(0.8) // Long break
+        } else {
+            return Color.green.opacity(0.8) // Short break
         }
     }
 
