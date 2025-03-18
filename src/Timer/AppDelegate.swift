@@ -83,6 +83,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         if timerStateString == "running" {
             // Timer is running - show Pause option
             menu.addItem(NSMenuItem(title: "Pause", action: #selector(toggleTimer), keyEquivalent: "p"))
+            // Also add Reset option when running
+            menu.addItem(NSMenuItem(title: "Reset", action: #selector(resetTimer), keyEquivalent: "0"))
         } else if timerStateString == "paused" {
             // Timer is paused - show Resume option
             menu.addItem(NSMenuItem(title: "Resume", action: #selector(toggleTimer), keyEquivalent: "r"))
@@ -115,7 +117,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             // Right-click shows the menu
             let menu = createMenu()
             statusItem?.menu = menu
+
+            // Use a separate timer to keep updating the status bar title while menu is shown
+            let updateTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+                self?.updateStatusBarTitle()
+            }
+
+            // Show the menu
             menu.popUp(positioning: nil, at: NSPoint(x: sender.frame.minX, y: sender.frame.minY), in: sender)
+
+            // Invalidate the update timer once the menu is closed
+            updateTimer.invalidate()
+
             // Remove the menu after it's shown to prevent it from appearing on left click
             DispatchQueue.main.async {
                 self.statusItem?.menu = nil
@@ -184,7 +197,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         view.addSubview(copyrightLabel)
 
         // Credits
-        let creditsLabel = NSTextField(labelWithString: "Thanks to Cloud & Chris Breuer")
+        let creditsLabel = NSTextField(labelWithString: "Thanks to Cloud and Chris Breuer")
         creditsLabel.frame = NSRect(x: 0, y: 110 + verticalOffset, width: 400, height: 20)
         creditsLabel.alignment = .center
         creditsLabel.font = NSFont.systemFont(ofSize: 12)
