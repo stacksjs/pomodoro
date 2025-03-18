@@ -32,6 +32,7 @@ socio
 Solana
 Spatie
 stacksjs
+swiftlint
 twoslash
 typecheck
 unconfig
@@ -42,6 +43,7 @@ upath
 vite
 vitebook
 vitejs
+volname
 vue-demi
 vueus
 xcodeproj

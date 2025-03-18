@@ -1,8 +1,9 @@
 {
-  "name": "@stacksjs/pomodoro",
+  "name": "pomodoro.app",
+  "private": true,
   "type": "module",
   "version": "0.0.0",
-  "description": "A minimal, functional, yet simple Pomodoro menubar app to help you stay focussed. For Mac.",
+  "description": "A lightweight macOS utility that serves up a perfectly organized menubar.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
   "homepage": "https://github.com/stacksjs/pomodoro#readme",
@@ -16,15 +17,16 @@
   "keywords": [
     "pomodoro",
     "timer",
-    "app",
-    "mac",
+    "technique",
     "productivity",
-    "stay focussed"
+    "app",
+    "mac"
   ],
   "scripts": {
-    "build": "bun --bun build.ts",
-    "lint": "bunx --bun eslint .",
-    "lint:fix": "bunx --bun eslint . --fix",
+    "build": "xcodebuild -project src/Pomodoro.xcodeproj -scheme Pomodoro -configuration Release CONFIGURATION_BUILD_DIR=$(pwd)/dist",
+    "package": "rm -rf ./dist/Pomodoro.dmg && create-dmg --volname \"Pomodoro\" --window-pos 200 120 --window-size 800 500 --background ./src/assets/dmg-bg.jpg --icon-size 128 --app-drop-link 600 250 --icon \"Pomodoro.app\" 200 250 ./dist/Pomodoro.dmg ./dist/Pomodoro.app",
+    "lint": "swiftlint ./src/**",
+    "lint:fix": "swiftlint ./src/** --fix ",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
     "changelog": "bunx changelogen --output CHANGELOG.md",
     "prepublishOnly": "bun --bun run build",
@@ -40,8 +42,6 @@
     "@stacksjs/eslint-config": "^4.8.2-beta.1",
     "@types/bun": "^1.2.5",
     "bumpp": "^10.1.0",
-    "bun-plugin-dtsx": "^0.21.9",
-    "changelogen": "^0.6.1",
     "lint-staged": "^15.5.0",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.8.2"
