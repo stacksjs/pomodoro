@@ -4,7 +4,7 @@ struct TimerView: View {
     @State private var timeRemaining = 272 // Initial time in seconds (4 minutes and 32 seconds)
     @State private var isPaused = false
     @State private var timer: Timer? = nil
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -16,7 +16,7 @@ struct TimerView: View {
                     .cornerRadius(5)
             }
             .padding(.horizontal)
-            
+
             // Slider to set the time
             Slider(value: Binding(
                 get: {
@@ -27,7 +27,7 @@ struct TimerView: View {
                 }
             ), in: 0...300, step: 1)
             .padding(.horizontal)
-            
+
             HStack {
                 Button(action: cancel) {
                     Text("cancel")
@@ -49,24 +49,24 @@ struct TimerView: View {
                 }
             }
             .padding(.horizontal)
-            
+
             Button(action: togglePause) {
                 Text(isPaused ? "resume" : "pause")
             }
-            
+
             Text(formatTime(timeRemaining))
                 .font(.largeTitle)
                 .padding()
         }
         .onAppear(perform: startTimer)
     }
-    
+
     func formatTime(_ seconds: Int) -> String {
         let minutes = seconds / 60
         let seconds = seconds % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-    
+
     func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             if timeRemaining > 0 && !isPaused {
@@ -74,19 +74,19 @@ struct TimerView: View {
             }
         }
     }
-    
+
     func cancel() {
         timer?.invalidate()
         timeRemaining = 0
     }
-    
+
     func restart() {
         timer?.invalidate()
         timeRemaining = 272 // Reset to initial value
         isPaused = false
         startTimer()
     }
-    
+
     func togglePause() {
         isPaused.toggle()
     }

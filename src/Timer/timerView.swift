@@ -13,7 +13,7 @@ struct timerView: View {
             .font(.system(size:50, design: .monospaced))
             .frame(width: 200, height: 100)
     }
-        
+
 }
 
 #Preview {

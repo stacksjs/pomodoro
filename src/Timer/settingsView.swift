@@ -11,7 +11,7 @@ struct settingsView: View {
             LaunchAtLogin.Toggle()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 20)
-            
+
             HStack{
                 VStack{
                     TextField("", value: $standardTimer, formatter: NumberFormatter())
@@ -19,7 +19,7 @@ struct settingsView: View {
                         .frame(width: 80)
                     Text("Standard Timer")
                         .font(.system(size: 9))
-                    
+
                 }
                 VStack{
                     TextField("", value: $shortBreak, formatter: NumberFormatter())
@@ -35,9 +35,9 @@ struct settingsView: View {
                     Text("Long Break")
                         .font(.system(size: 9))
                 }
-                
+
             }
-            
+
         }
         .frame(width: 300, height: 200)
     }
