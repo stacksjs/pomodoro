@@ -6,7 +6,8 @@
 
 import Foundation
 
-enum TimerState {
+// Make sure TimerState is public
+public enum TimerState {
     case running
     case paused
     case stopped

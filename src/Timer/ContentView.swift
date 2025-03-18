@@ -13,7 +13,7 @@ struct TimerDisplayView: View {
         Text(timeString(from: remainingTime))
             .font(.system(size: 60, weight: .medium, design: .monospaced))
             .foregroundColor(.primary)
-            .padding(.top, 10)
+            .padding(.top, 20) // Increased top padding
     }
 
     private func timeString(from seconds: Int) -> String {
@@ -29,6 +29,9 @@ struct ProgressSliderView: View {
     var timerColor: Color
     var onDragChanged: (Double) -> Void
 
+    @State private var isDragging = false
+    @State private var dragValue: Double?
+
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
@@ -43,27 +46,44 @@ struct ProgressSliderView: View {
                     .cornerRadius(3)
 
                 Circle()
-                    .frame(width: 16, height: 16)
+                    .frame(width: 20, height: 20) // Increased size for better touch target
                     .foregroundColor(.white)
                     .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.15), radius: 2, x: 0, y: 1)
-                    .offset(x: calculateProgressWidth(totalWidth: geometry.size.width) - 8)
+                    .offset(x: calculateProgressWidth(totalWidth: geometry.size.width) - 10)
+                    .gesture(
+                        DragGesture(minimumDistance: 0)
+                            .onChanged { value in
+                                isDragging = true
+                                let percentage = min(max(0, value.location.x / geometry.size.width), 1)
+                                let newValue = percentage * timerDuration * 60
+                                dragValue = Double(newValue)
+                                onDragChanged(newValue)
+                            }
+                            .onEnded { _ in
+                                isDragging = false
+                                dragValue = nil
+                            }
+                    )
             }
-            .gesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { value in
-                        let totalWidth = geometry.size.width
-                        let percentage = min(max(0, value.location.x / totalWidth), 1)
-                        let newValue = percentage * timerDuration * 60
-                        onDragChanged(newValue)
-                    }
-            )
+            .contentShape(Rectangle()) // Makes the entire area tappable
+            .onTapGesture { location in
+                // Calculate the tap location relative to the view
+                let percentage = min(max(0, location.x / geometry.size.width), 1)
+                let newValue = percentage * timerDuration * 60
+                onDragChanged(newValue)
+            }
         }
-        .frame(height: 20)
+        .frame(height: 30) // Increased height for better touch target
     }
 
     private func calculateProgressWidth(totalWidth: CGFloat) -> CGFloat {
-        let progress = CGFloat(remainingTime) / CGFloat(timerDuration * 60)
-        return totalWidth * progress
+        if isDragging, let value = dragValue {
+            let progress = value / (timerDuration * 60)
+            return min(max(0, CGFloat(progress) * totalWidth), totalWidth)
+        } else {
+            let progress = CGFloat(remainingTime) / CGFloat(timerDuration * 60)
+            return min(max(0, progress * totalWidth), totalWidth)
+        }
     }
 }
 
@@ -122,6 +142,7 @@ struct TimerPresetsView: View {
 
     var body: some View {
         HStack(spacing: 12) {
+            // Reordered buttons: 5, 10, 25 min
             Button(action: { onPresetSelected(presets[1]) }) {
                 Text("\(presets[1]) Min")
                     .font(.system(size: 14, weight: .medium))
@@ -161,7 +182,7 @@ struct TimerPresetsView: View {
             }
             .buttonStyle(PlainButtonStyle())
         }
-        .padding(.bottom, 5)
+        // Removed bottom padding that was creating border appearance
     }
 }
 
