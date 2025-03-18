@@ -1,5 +1,8 @@
 import SwiftUI
 import AppKit
+import Foundation
+import Combine
+import AVFoundation
 
 // MARK: - Helper Views
 
@@ -27,36 +30,38 @@ struct ProgressSliderView: View {
     var onDragChanged: (Double) -> Void
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            Rectangle()
-                .frame(height: 6)
-                .foregroundColor(Color(NSColor.systemGray))
-                .cornerRadius(3)
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .frame(height: 6)
+                    .foregroundColor(Color(NSColor.systemGray))
+                    .cornerRadius(3)
 
-            Rectangle()
-                .frame(width: calculateProgressWidth(), height: 6)
-                .foregroundColor(timerColor)
-                .cornerRadius(3)
+                Rectangle()
+                    .frame(width: calculateProgressWidth(totalWidth: geometry.size.width), height: 6)
+                    .foregroundColor(timerColor)
+                    .cornerRadius(3)
 
-            Circle()
-                .frame(width: 16, height: 16)
-                .foregroundColor(.white)
-                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.15), radius: 2, x: 0, y: 1)
-                .offset(x: calculateProgressWidth() - 8)
+                Circle()
+                    .frame(width: 16, height: 16)
+                    .foregroundColor(.white)
+                    .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.15), radius: 2, x: 0, y: 1)
+                    .offset(x: calculateProgressWidth(totalWidth: geometry.size.width) - 8)
+            }
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        let totalWidth = geometry.size.width
+                        let percentage = min(max(0, value.location.x / totalWidth), 1)
+                        let newValue = percentage * timerDuration * 60
+                        onDragChanged(newValue)
+                    }
+            )
         }
-        .padding(.horizontal)
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { value in
-                    let percentage = min(max(0, value.location.x / 300), 1)
-                    let newValue = percentage * timerDuration * 60
-                    onDragChanged(newValue)
-                }
-        )
+        .frame(height: 20)
     }
 
-    private func calculateProgressWidth() -> CGFloat {
-        let totalWidth: CGFloat = 300 - 40 // Account for padding
+    private func calculateProgressWidth(totalWidth: CGFloat) -> CGFloat {
         let progress = CGFloat(remainingTime) / CGFloat(timerDuration * 60)
         return totalWidth * progress
     }
@@ -117,20 +122,44 @@ struct TimerPresetsView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            ForEach(presets, id: \.self) { minutes in
-                Button(action: { onPresetSelected(minutes) }) {
-                    Text("\(minutes) Min")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(currentDuration == Double(minutes) ? .white : .primary)
-                        .frame(height: 30)
-                        .padding(.horizontal, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(currentDuration == Double(minutes) ? timerColor : Color(NSColor.controlBackgroundColor))
-                        )
-                }
-                .buttonStyle(PlainButtonStyle())
+            Button(action: { onPresetSelected(presets[1]) }) {
+                Text("\(presets[1]) Min")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(currentDuration == Double(presets[1]) ? .white : .primary)
+                    .frame(height: 30)
+                    .padding(.horizontal, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(currentDuration == Double(presets[1]) ? timerColor : Color(NSColor.controlBackgroundColor))
+                    )
             }
+            .buttonStyle(PlainButtonStyle())
+
+            Button(action: { onPresetSelected(presets[2]) }) {
+                Text("\(presets[2]) Min")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(currentDuration == Double(presets[2]) ? .white : .primary)
+                    .frame(height: 30)
+                    .padding(.horizontal, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(currentDuration == Double(presets[2]) ? timerColor : Color(NSColor.controlBackgroundColor))
+                    )
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            Button(action: { onPresetSelected(presets[0]) }) {
+                Text("\(presets[0]) Min")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(currentDuration == Double(presets[0]) ? .white : .primary)
+                    .frame(height: 30)
+                    .padding(.horizontal, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(currentDuration == Double(presets[0]) ? timerColor : Color(NSColor.controlBackgroundColor))
+                    )
+            }
+            .buttonStyle(PlainButtonStyle())
         }
         .padding(.bottom, 5)
     }
@@ -195,6 +224,7 @@ struct ContentView: View {
                     viewModel.updateRemainingTime()
                 }
             )
+            .padding(.horizontal)
 
             // Control buttons
             ControlButtonsView(
