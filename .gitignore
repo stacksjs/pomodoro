@@ -4,11 +4,12 @@
 *.log
 *.tgz
 coverage
-dist
+dist/*
+!dist/**/*.dmg
 lib-cov
 logs
 node_modules
 temp
 docs/.vitepress/cache
-src/Timer.xcodeproj/project.xcworkspace/xcuserdata/*
-src/Timer.xcodeproj/xcuserdata/*
+docs/.vitepress/dist
+src/Pomodoro.xcodeproj/*/xcuserdata

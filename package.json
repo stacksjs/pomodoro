@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "version": "0.0.0",
-  "description": "A lightweight macOS utility that serves up a perfectly organized menubar.",
+  "description": "A minimal, functional, yet simple Pomodoro app—to help you be productive.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
   "homepage": "https://github.com/stacksjs/pomodoro#readme",
@@ -19,6 +19,8 @@
     "timer",
     "technique",
     "productivity",
+    "focussed",
+    "work",
     "app",
     "mac"
   ],
