@@ -53,13 +53,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         self.statusItem = statusItem
 
-        // Create a separate menu for right-click
-        let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "About", action: #selector(showAbout), keyEquivalent: "a"))
-        menu.addItem(NSMenuItem(title: "Help", action: #selector(showHelp), keyEquivalent: "h"))
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(quitApp), keyEquivalent: "q"))
-
         // Configure the button to handle both left and right clicks
         if let statusButton = statusItem.button {
             statusButton.title = "⏱️"
@@ -79,6 +72,39 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             .store(in: &cancellables)
     }
 
+    // Create menu with all available options
+    private func createMenu() -> NSMenu {
+        let menu = NSMenu()
+
+        // Get the current timer state as a string
+        let timerStateString = String(describing: viewModel.timerState)
+
+        // Add dynamic menu items based on timer state
+        if timerStateString == "running" {
+            // Timer is running - show Pause option
+            menu.addItem(NSMenuItem(title: "Pause", action: #selector(toggleTimer), keyEquivalent: "p"))
+        } else if timerStateString == "paused" {
+            // Timer is paused - show Resume option
+            menu.addItem(NSMenuItem(title: "Resume", action: #selector(toggleTimer), keyEquivalent: "r"))
+            // Also add Reset option when paused
+            menu.addItem(NSMenuItem(title: "Reset", action: #selector(resetTimer), keyEquivalent: "0"))
+        } else {
+            // Timer is stopped - show Start option
+            menu.addItem(NSMenuItem(title: "Start", action: #selector(toggleTimer), keyEquivalent: "s"))
+        }
+
+        // Add separator before About and Help
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "About", action: #selector(showAbout), keyEquivalent: "a"))
+        menu.addItem(NSMenuItem(title: "Help", action: #selector(showHelp), keyEquivalent: "h"))
+
+        // Add Quit at the end
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Quit", action: #selector(quitApp), keyEquivalent: "q"))
+
+        return menu
+    }
+
     @objc func handleStatusItemClick(sender: NSStatusBarButton) {
         let event = NSApp.currentEvent!
 
@@ -87,11 +113,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             togglePopover(sender)
         } else if event.type == .rightMouseUp {
             // Right-click shows the menu
-            let menu = NSMenu()
-            menu.addItem(NSMenuItem(title: "About", action: #selector(showAbout), keyEquivalent: "a"))
-            menu.addItem(NSMenuItem(title: "Help", action: #selector(showHelp), keyEquivalent: "h"))
-            menu.addItem(NSMenuItem.separator())
-            menu.addItem(NSMenuItem(title: "Quit", action: #selector(quitApp), keyEquivalent: "q"))
+            let menu = createMenu()
             statusItem?.menu = menu
             menu.popUp(positioning: nil, at: NSPoint(x: sender.frame.minX, y: sender.frame.minY), in: sender)
             // Remove the menu after it's shown to prevent it from appearing on left click
@@ -249,6 +271,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     @objc func quitApp() {
         NSApplication.shared.terminate(self)
+    }
+
+    @objc func toggleTimer() {
+        viewModel.toggleTimer()
+    }
+
+    @objc func resetTimer() {
+        viewModel.resetTimer()
     }
 
     func updateStatusBarTitle() {
