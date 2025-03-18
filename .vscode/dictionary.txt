@@ -11,6 +11,7 @@ commitlint
 commitlintrc
 composables
 davidanson
+dbaeumer
 degit
 deps
 destructurable
@@ -43,6 +44,7 @@ upath
 vite
 vitebook
 vitejs
+vitepress
 volname
 vue-demi
 vueus
