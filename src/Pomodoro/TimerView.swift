@@ -1,5 +1,5 @@
 //
-//  timerView.swift
+//  TimerView.swift
 //  Timer
 //
 //
@@ -7,7 +7,7 @@
 import SwiftUI
 import AppKit
 
-struct timerView: View {
+struct TimerView: View {
     @ObservedObject var viewModel: TimerViewModel
 
     var body: some View {
@@ -68,9 +68,9 @@ struct timerView: View {
 }
 
 #if DEBUG
-struct timerView_Previews: PreviewProvider {
+struct TimerView_Previews: PreviewProvider {
     static var previews: some View {
-        timerView(viewModel: TimerViewModel(duration: 25))
+        TimerView(viewModel: TimerViewModel(duration: 25))
     }
 }
 #endif

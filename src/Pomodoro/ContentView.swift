@@ -309,7 +309,7 @@ struct ContentView: View {
         newWindow.setFrameAutosaveName("TimerWindow")
         newWindow.isReleasedWhenClosed = false
         newWindow.level = .floating
-        newWindow.contentView = NSHostingView(rootView: timerView(viewModel: viewModel))
+        newWindow.contentView = NSHostingView(rootView: TimerView(viewModel: viewModel))
         newWindow.makeKeyAndOrderFront(nil)
     }
 
@@ -329,7 +329,7 @@ struct ContentView: View {
         newWindow.setFrameAutosaveName("SettingsWindow")
         newWindow.isReleasedWhenClosed = false
         newWindow.level = .floating
-        newWindow.contentView = NSHostingView(rootView: settingsView(standardTimer: $standardTimer, shortBreak: $shortBreak, longBreak: $longBreak))
+        newWindow.contentView = NSHostingView(rootView: SettingsView(standardTimer: $standardTimer, shortBreak: $shortBreak, longBreak: $longBreak))
         newWindow.makeKeyAndOrderFront(nil)
     }
 }

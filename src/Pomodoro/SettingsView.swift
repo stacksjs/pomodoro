@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-struct settingsView: View {
+struct SettingsView: View {
     @Binding var standardTimer: Int
     @Binding var shortBreak: Int
     @Binding var longBreak: Int
@@ -73,8 +73,8 @@ struct settingsView: View {
     }
 }
 
-struct settingsView_Previews: PreviewProvider {
+struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        settingsView(standardTimer: .constant(25), shortBreak: .constant(5), longBreak: .constant(15))
+        SettingsView(standardTimer: .constant(25), shortBreak: .constant(5), longBreak: .constant(15))
     }
 }

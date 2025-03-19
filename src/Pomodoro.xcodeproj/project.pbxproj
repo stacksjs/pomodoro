@@ -10,6 +10,12 @@
 		632108442C53E8B7002D790E /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632108432C53E8B7002D790E /* TimerState.swift */; };
 		63313B1C2C40276C0016C932 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63313B1B2C40276C0016C932 /* TimerViewModel.swift */; };
 		63313B1E2C40DCA20016C932 /* alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63313B1D2C40DCA20016C932 /* alarm.mp3 */; };
+		5ED30B01C3F9D810084ACA1 /* forest.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5ED30B02C3F9D810084ACA2 /* forest.mp3 */; };
+		5ED30B03C3F9D810084ACA3 /* fire.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5ED30B04C3F9D810084ACA4 /* fire.mp3 */; };
+		5ED30B05C3F9D810084ACA5 /* waterfall.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5ED30B06C3F9D810084ACA6 /* waterfall.mp3 */; };
+		5ED30B07C3F9D810084ACA7 /* river.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5ED30B08C3F9D810084ACA8 /* river.mp3 */; };
+		5ED30B09C3F9D810084ACA9 /* waves.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5ED30B10C3F9D810084AB0 /* waves.mp3 */; };
+		5ED30B11C3F9D810084AB1 /* heavy-rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5ED30B12C3F9D810084AB2 /* heavy-rain.mp3 */; };
 		636EF0D92C4423BF004CEA6E /* timerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636EF0D82C4423BF004CEA6E /* timerView.swift */; };
 		637D39A72C3F9D810084ACA9 /* TimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637D39A62C3F9D810084ACA9 /* TimerApp.swift */; };
 		637D39A92C3F9D810084ACA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637D39A82C3F9D810084ACA9 /* ContentView.swift */; };
@@ -42,6 +48,12 @@
 		632108432C53E8B7002D790E /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
 		63313B1B2C40276C0016C932 /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
 		63313B1D2C40DCA20016C932 /* alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm.mp3; sourceTree = "<group>"; };
+		5ED30B02C3F9D810084ACA2 /* forest.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = forest.mp3; sourceTree = "<group>"; };
+		5ED30B04C3F9D810084ACA4 /* fire.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fire.mp3; sourceTree = "<group>"; };
+		5ED30B06C3F9D810084ACA6 /* waterfall.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = waterfall.mp3; sourceTree = "<group>"; };
+		5ED30B08C3F9D810084ACA8 /* river.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = river.mp3; sourceTree = "<group>"; };
+		5ED30B10C3F9D810084AB0 /* waves.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = waves.mp3; sourceTree = "<group>"; };
+		5ED30B12C3F9D810084AB2 /* heavy-rain.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "heavy-rain.mp3"; sourceTree = "<group>"; };
 		636EF0D82C4423BF004CEA6E /* timerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = timerView.swift; sourceTree = "<group>"; };
 		637D39A32C3F9D810084ACA9 /* Pomodoro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pomodoro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		637D39A62C3F9D810084ACA9 /* TimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerApp.swift; sourceTree = "<group>"; };
@@ -104,6 +116,12 @@
 			isa = PBXGroup;
 			children = (
 				63313B1D2C40DCA20016C932 /* alarm.mp3 */,
+				5ED30B02C3F9D810084ACA2 /* forest.mp3 */,
+				5ED30B04C3F9D810084ACA4 /* fire.mp3 */,
+				5ED30B06C3F9D810084ACA6 /* waterfall.mp3 */,
+				5ED30B08C3F9D810084ACA8 /* river.mp3 */,
+				5ED30B10C3F9D810084AB0 /* waves.mp3 */,
+				5ED30B12C3F9D810084AB2 /* heavy-rain.mp3 */,
 				637D39A62C3F9D810084ACA9 /* TimerApp.swift */,
 				63313B1B2C40276C0016C932 /* TimerViewModel.swift */,
 				632108432C53E8B7002D790E /* TimerState.swift */,
@@ -240,6 +258,12 @@
 				637D39AE2C3F9D820084ACA9 /* Preview Assets.xcassets in Resources */,
 				637D39AB2C3F9D820084ACA9 /* Assets.xcassets in Resources */,
 				63313B1E2C40DCA20016C932 /* alarm.mp3 in Resources */,
+				5ED30B01C3F9D810084ACA1 /* forest.mp3 in Resources */,
+				5ED30B03C3F9D810084ACA3 /* fire.mp3 in Resources */,
+				5ED30B05C3F9D810084ACA5 /* waterfall.mp3 in Resources */,
+				5ED30B07C3F9D810084ACA7 /* river.mp3 in Resources */,
+				5ED30B09C3F9D810084ACA9 /* waves.mp3 in Resources */,
+				5ED30B11C3F9D810084AB1 /* heavy-rain.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,7 +570,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = Timer;
+				TEST_TARGET_NAME = Pomodoro;
 			};
 			name = Debug;
 		};
@@ -563,7 +587,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = Timer;
+				TEST_TARGET_NAME = Pomodoro;
 			};
 			name = Release;
 		};

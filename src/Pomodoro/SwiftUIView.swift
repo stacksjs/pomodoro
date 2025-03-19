@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TimerView: View {
+struct TimerSliderView: View {
     @State private var timeRemaining = 272 // Initial time in seconds (4 minutes and 32 seconds)
     @State private var isPaused = false
     @State private var timer: Timer? = nil
@@ -92,8 +92,8 @@ struct TimerView: View {
     }
 }
 
-struct TimerView_Previews: PreviewProvider {
+struct TimerSliderView_Previews: PreviewProvider {
     static var previews: some View {
-        TimerView()
+        TimerSliderView()
     }
 }
