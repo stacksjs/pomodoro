@@ -84,6 +84,7 @@ jobs:
         run: bun test
 
   publish-commit:
+    needs: [lint, typecheck, test]
     runs-on: macos-latest
 
     steps:
