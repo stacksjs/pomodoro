@@ -48,9 +48,6 @@
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.8.2"
   },
-  "overrides": {
-    "unconfig": "0.3.10"
-  },
   "lint-staged": {
     "*.{js,ts}": "bunx --bun eslint . --fix"
   }
