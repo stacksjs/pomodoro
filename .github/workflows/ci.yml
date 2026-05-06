@@ -18,13 +18,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
 
       - name: Use cached node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/bun.lock') }}
@@ -34,6 +34,9 @@ jobs:
       - name: Install Dependencies
         run: bun install
 
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
       - name: Lint
         run: bun run lint
 
@@ -41,13 +44,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
 
       - name: Use cached node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/bun.lock') }}
@@ -64,13 +67,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
 
       - name: Use cached node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/bun.lock') }}
@@ -88,13 +91,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
 
       - name: Use cached node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/bun.lock') }}
