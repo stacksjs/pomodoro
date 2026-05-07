@@ -42,7 +42,7 @@
   "devDependencies": {
     "@stacksjs/docs": "^0.69.3",
     "@types/bun": "^1.2.5",
-    "bumpp": "^10.1.0",
+    "bumpp": "^11.1.0",
     "lint-staged": "^15.5.0",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.8.2"
