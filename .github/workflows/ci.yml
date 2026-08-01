@@ -18,7 +18,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
@@ -91,7 +91,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
